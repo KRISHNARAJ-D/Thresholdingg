@@ -1,76 +1,95 @@
-# Implementation-of-Erosion-and-Dilation
+# THRESHOLDING
 ## Aim
-To implement Erosion and Dilation using Python and OpenCV.
+To segment the image using global thresholding, adaptive thresholding and Otsu's thresholding using python and OpenCV.
+
 ## Software Required
 1. Anaconda - Python 3.7
 2. OpenCV
-## Algorithm:
+
+## Algorithm
 ### Step1:
-Import the necessary packages
+Load the necessary packages.
 
-### Step2:
-Create the text using cv2.putText
+### Step2: 
+Read the Image and convert to grayscale.
 
-### Step3:
-Create the structuring element
+### Step3: 
+Use Global thresholding to segment the image.
 
-### Step4:
-Erode the image
+### Step4: 
+Use Adaptive thresholding to segment the image.
 
-### Step5:
-Dilate the Image
+### Step5: 
+Use Otsu's method to segment the image and display the results.
 
-## Program:
+## Program
 ```
-NAME: KRISHNARAJ D
-REG NO: 212222230070
+ Developed By : KRISHNARAJ D
+ Register Number : 212222230070
 ```
-### Import the necessary packages
-``` Python
 
+### Load the necessary packages
+```python
 import numpy as np
-import cv2
 import matplotlib.pyplot as plt
+import cv2
 ```
-
-### Create the Text using cv2.putText
-``` Python
-img = np.zeros((100,400),dtype='uint8')
-font = cv2.FONT_HERSHEY_SIMPLEX
-cv2.putText(img,'KRISHNA',(40,70),font,2,(255),5,cv2.LINE_AA)
-plt.imshow(img)
-plt.axis('off')
+### Read the Image and convert to grayscale
+```python
+image = cv2.imread('dog.jpg',1)
+image = cv2.cvtColor(image,cv2.COLOR_BGR2RGB)
+image_gray = cv2.imread('dog.jpg',0)
 ```
-### Create the structuring element
-``` Python
-kernel = np.ones((5,5),np.uint8)
-kernel1 = cv2.getStructuringElement(cv2.MORPH_CROSS,(5,5))
+### Use Global thresholding to segment the image
+```python
+ret,thresh_img1=cv2.threshold(image_gray,86,255,cv2.THRESH_BINARY)
+ret,thresh_img2=cv2.threshold(image_gray,86,255,cv2.THRESH_BINARY_INV)
+ret,thresh_img3=cv2.threshold(image_gray,86,255,cv2.THRESH_TOZERO)
+ret,thresh_img4=cv2.threshold(image_gray,86,255,cv2.THRESH_TOZERO_INV)
+ret,thresh_img5=cv2.threshold(image_gray,100,255,cv2.THRESH_TRUNC)
 ```
-### Erode the image
-``` Python
-img_erode = cv2.erode(img,kernel1)
-plt.imshow(img_erode)
-plt.axis('off')
+### Use Adaptive thresholding to segment the image
+```python
+thresh_img7=cv2.adaptiveThreshold(image_gray,255,cv2.ADAPTIVE_THRESH_MEAN_C,cv2.THRESH_BINARY,11,2)
+thresh_img8=cv2.adaptiveThreshold(image_gray,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY,11,2)
 ```
-### Dilate the image
-``` Python
-img_dilate = cv2.dilate(img,kernel1)
-plt.imshow(img_dilate)
-plt.axis('off')
+### Use Otsu's method to segment the image 
+```python
+ret,thresh_img6=cv2.threshold(image_gray,0,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU)
 ```
-## Output:
+### Display the results
+```python
+titles=["Gray Image","Threshold Image (Binary)","Threshold Image (Binary Inverse)","Threshold Image (To Zero)"
+       ,"Threshold Image (To Zero-Inverse)","Threshold Image (Truncate)","Otsu","Adaptive Threshold (Mean)","Adaptive Threshold (Gaussian)"]
+images=[image_gray,thresh_img1,thresh_img2,thresh_img3,thresh_img4,thresh_img5,thresh_img6,thresh_img7,thresh_img8]
+for i in range(0,9):
+    plt.figure(figsize=(10,10))
+    plt.subplot(1,2,1)
+    plt.title("Original Image")
+    plt.imshow(image)
+    plt.axis("off")
+    plt.subplot(1,2,2)
+    plt.title(titles[i])
+    plt.imshow(cv2.cvtColor(images[i],cv2.COLOR_BGR2RGB))
+    plt.axis("off")
+    plt.show()
+```
+## Output
+### Original Image
+![327127614-5b59dbed-6233-4623-a671-69f2d7b87b9e](https://github.com/KRISHNARAJ-D/Thresholdingg/assets/119559695/af0dc888-9305-428d-b1ae-4537e7f48f38)
 
-### Display the input Image
-![9 1](https://github.com/KRISHNARAJ-D/Thresholdingg/assets/119559695/c508596f-87e6-44a0-bf9e-46e231ffbefe)
+
+### Global Thresholding
+![327127764-74c9a5c8-2a09-4370-8166-d48db5650531](https://github.com/KRISHNARAJ-D/Thresholdingg/assets/119559695/e03e73a8-deb1-4870-a162-91f0d28f378d)
+![327128565-086a257b-ea0c-4dd6-9754-f3335e27fbb4](https://github.com/KRISHNARAJ-D/Thresholdingg/assets/119559695/8a33bf56-de16-4b30-854d-8eb9ba2b08fc)
+
+### Adaptive Thresholding
+![327127975-6aa8780c-2d6e-404b-81c0-ea18eca81315](https://github.com/KRISHNARAJ-D/Thresholdingg/assets/119559695/68ac5366-3e71-4b75-a5c5-b321a7649a97)
 
 
-### Display the Eroded Image
-
-![9 2](https://github.com/KRISHNARAJ-D/Thresholdingg/assets/119559695/78bb1ab6-608d-4f0c-b0b1-4524395ff1af)
-
-### Display the Dilated Image
-![9 3](https://github.com/KRISHNARAJ-D/Thresholdingg/assets/119559695/1a6a4d37-93c1-40d9-8238-13582260a072)
+### Optimum Global Thesholding using Otsu's Method
+![327128066-8c8ece0c-c242-4b8a-9506-6ef1093756a4](https://github.com/KRISHNARAJ-D/Thresholdingg/assets/119559695/bd9af8dd-cb7e-4c3f-bdc0-83ba645d9a2b)
 
 
 ## Result
-Thus the generated text image is eroded and dilated using python and OpenCV.
+Thus the images are segmented using global thresholding, adaptive thresholding and optimum global thresholding using python and OpenCV.
